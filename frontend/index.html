@@ -2,28 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Manager</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Task Manager - Auth</title>
 </head>
 <body>
-  <h1>Task Manager</h1>
 
-  <div id="register">
-    <h2>Register</h2>
-    <input type="text" id="reg-username" placeholder="Username">
-    <input type="email" id="reg-email" placeholder="Email">
-    <input type="password" id="reg-password" placeholder="Password">
-    <button onclick="register()">Register</button>
-  </div>
+<h1>Task Manager</h1>
 
-  <div id="login">
-    <h2>Login</h2>
-    <input type="email" id="login-email" placeholder="Email">
-    <input type="password" id="login-password" placeholder="Password">
-    <button onclick="login()">Login</button>
-  </div>
+<h2>Login</h2>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
 
-  <script src="app.js"></script>
+<hr>
+
+<h2>Register</h2>
+<input id="r_username" placeholder="Username">
+<input id="r_email" placeholder="Email">
+<input id="r_password" type="password" placeholder="Password">
+<button onclick="register()">Register</button>
+
+<script src="app.js"></script>
 </body>
 </html>

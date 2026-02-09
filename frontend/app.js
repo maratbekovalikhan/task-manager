@@ -1,91 +1,149 @@
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://task-manager-y06e.onrender.com/api";
 
-function register() {
-  const username = document.getElementById("reg-username").value;
-  const email = document.getElementById("reg-email").value;
-  const password = document.getElementById("reg-password").value;
+/* ===== DOM элементы ===== */
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
 
-  fetch(`${API_URL}/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, email, password })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if(data.token) {
-      localStorage.setItem("token", data.token);
-      alert("Registered successfully!");
-      window.location.href = "tasks.html";
-    } else {
-      alert(data.message);
-    }
-  });
-}
+const rUsernameInput = document.getElementById("r_username");
+const rEmailInput = document.getElementById("r_email");
+const rPasswordInput = document.getElementById("r_password");
 
-function login() {
-  const email = document.getElementById("login-email").value;
-  const password = document.getElementById("login-password").value;
+const titleInput = document.getElementById("title");
+const descriptionInput = document.getElementById("description");
+const tasksEl = document.getElementById("tasks");
 
-  fetch(`${API_URL}/auth/login`, {
+/* ===== AUTH ===== */
+async function login() {
+  const email = emailInput.value;
+  const password = passwordInput.value;
+
+  const res = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if(data.token) {
-      localStorage.setItem("token", data.token);
-      alert("Logged in!");
-      window.location.href = "tasks.html";
-    } else {
-      alert(data.message);
-    }
   });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message || "Login failed");
+    return;
+  }
+
+  localStorage.setItem("token", data.token);
+  window.location.href = "tasks.html";
 }
 
-function loadTasks() {
-  const token = localStorage.getItem("token");
-  fetch(`${API_URL}/tasks`, {
-    headers: { "Authorization": `Bearer ${token}` }
-  })
-  .then(res => res.json())
-  .then(tasks => {
-    const list = document.getElementById("task-list");
-    list.innerHTML = "";
-    tasks.forEach(t => {
-      const li = document.createElement("li");
-      li.textContent = `${t.title} - ${t.description} [${t.status}]`;
-      list.appendChild(li);
-    });
-  });
-}
+async function register() {
+  const username = rUsernameInput.value;
+  const email = rEmailInput.value;
+  const password = rPasswordInput.value;
 
-function createTask() {
-  const token = localStorage.getItem("token");
-  const title = document.getElementById("task-title").value;
-  const description = document.getElementById("task-desc").value;
-  const dueDate = document.getElementById("task-due").value;
-
-  fetch(`${API_URL}/tasks`, {
+  const res = await fetch(`${API_URL}/auth/register`, {
     method: "POST",
-    headers: { 
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, email, password })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message || "Register failed");
+    return;
+  }
+
+  alert("Registered successfully. Now login.");
+}
+
+/* ===== TASKS ===== */
+async function createTask() {
+  const token = localStorage.getItem("token");
+  if (!token) return alert("Not authorized");
+
+  const res = await fetch(`${API_URL}/tasks`, {
+    method: "POST",
+    headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}` 
+      "Authorization": `Bearer ${token}`
     },
-    body: JSON.stringify({ title, description, dueDate, status: "pending" })
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert("Task created!");
-    loadTasks();
+    body: JSON.stringify({
+      title: titleInput.value,
+      description: descriptionInput.value
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    alert(err.message || "Task creation failed");
+    return;
+  }
+
+  titleInput.value = "";
+  descriptionInput.value = "";
+  loadTasks();
+}
+
+async function loadTasks() {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const res = await fetch(`${API_URL}/tasks`, {
+    headers: { "Authorization": `Bearer ${token}` }
+  });
+
+  if (!res.ok) {
+    tasksEl.innerHTML = "Failed to load tasks.";
+    return;
+  }
+
+  const tasks = await res.json();
+  tasksEl.innerHTML = "";
+
+  tasks.forEach(t => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${t.title}</strong> - ${t.description} 
+      [${t.completed ? "✅" : "❌"}] 
+      <button onclick="deleteTask('${t._id}')">Delete</button>
+      <button onclick="toggleTask('${t._id}', ${t.completed})">Toggle</button>
+    `;
+    tasksEl.appendChild(li);
   });
 }
 
+async function deleteTask(id) {
+  const token = localStorage.getItem("token");
+
+  await fetch(`${API_URL}/tasks/${id}`, {
+    method: "DELETE",
+    headers: { "Authorization": `Bearer ${token}` }
+  });
+
+  loadTasks();
+}
+
+async function toggleTask(id, completed) {
+  const token = localStorage.getItem("token");
+
+  await fetch(`${API_URL}/tasks/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ completed: !completed })
+  });
+
+  loadTasks();
+}
+
+/* ===== LOGOUT ===== */
 function logout() {
   localStorage.removeItem("token");
   window.location.href = "index.html";
 }
 
-if(window.location.pathname.includes("tasks.html")) {
+/* ===== AUTO LOAD ===== */
+if (window.location.pathname.includes("tasks.html")) {
   loadTasks();
 }
