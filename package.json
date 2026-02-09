@@ -1,9 +1,6 @@
 {
-
   "name": "task-manager-api",
   "version": "1.0.0",
-  "description": "Task Manager API with JWT Authentication",
-  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js"
