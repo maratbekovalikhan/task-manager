@@ -2,31 +2,23 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../config/jwt");
 
-/* REGISTER */
 exports.register = async (req, res) => {
   try {
-    const username = req.body.username;
-    const email = req.body.email.toLowerCase(); // 🔥 ВАЖНО
-    const password = req.body.password;
+    const { username, email, password } = req.body;
+    const userExists = await User.findOne({ email: email.toLowerCase() });
 
-    const userExists = await User.findOne({ email });
-
-    if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
-    }
+    if (userExists) return res.status(400).json({ message: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
       username,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
       role: "user"
     });
 
-    res.status(201).json({
-      token: generateToken(user._id)
-    });
+    res.status(201).json({ token: generateToken(user._id) });
 
   } catch (err) {
     console.error(err);
@@ -34,28 +26,16 @@ exports.register = async (req, res) => {
   }
 };
 
-
-/* LOGIN */
 exports.login = async (req, res) => {
   try {
-    const email = req.body.email.toLowerCase(); // 🔥 ВАЖНО
-    const password = req.body.password;
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    res.json({
-      token: generateToken(user._id)
-    });
+    res.json({ token: generateToken(user._id) });
 
   } catch (err) {
     console.error("LOGIN ERROR:", err);

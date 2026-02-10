@@ -10,6 +10,7 @@ const {
   updateTaskValidator,
 } = require("../validators/taskValidator");
 
+
 const validate = (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
@@ -30,6 +31,6 @@ router.get("/:id", controller.getTaskById);
 
 router.put("/:id", validate(updateTaskValidator), controller.updateTask);
 
-router.delete("/:id", controller.deleteTask);
+router.delete("/:id", role(["moderator", "admin"]), controller.deleteTask);
 
 module.exports = router;
