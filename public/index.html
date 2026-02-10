@@ -1,25 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login</title>
+  <meta charset="UTF-8">
+  <title>Task Manager</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Login</h2>
+<div class="card" id="loginCard">
 
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
+  <h2>Login</h2>
 
-<hr>
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
 
-<h2>Register</h2>
+  <button onclick="login()">Login</button>
 
-<input id="r_username" placeholder="Username">
-<input id="r_email" placeholder="Email">
-<input id="r_password" type="password" placeholder="Password">
-<button onclick="register()">Register</button>
+  <div class="switch" onclick="showRegister()">
+    No account? Register
+  </div>
+
+</div>
+
+
+<div class="card" id="registerCard" style="display:none">
+
+  <h2>Register</h2>
+
+  <input id="r_username" placeholder="Username">
+  <input id="r_email" placeholder="Email">
+  <input id="r_password" type="password" placeholder="Password">
+
+  <button onclick="register()">Register</button>
+
+  <div class="switch" onclick="showLogin()">
+    Already have account? Login
+  </div>
+
+</div>
 
 <script src="app.js"></script>
 </body>
