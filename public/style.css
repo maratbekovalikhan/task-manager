@@ -12,18 +12,16 @@ body {
 nav {
   width: 100%;
   background: #1e3a8a;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: 15px 40px;
   color: white;
-
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
+  flex-wrap: wrap;
 }
 
 nav h3 {
@@ -34,7 +32,8 @@ nav h3 {
 nav div {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 nav a {
@@ -53,6 +52,7 @@ nav button {
   background: #ef4444;
   border-radius: 6px;
   font-size: 14px;
+  cursor: pointer;
 }
 
 nav button:hover {
@@ -61,13 +61,10 @@ nav button:hover {
 
 .container {
   background: white;
-
   width: 600px;
-  max-width: 90%;
-
+  max-width: 95%;
   padding: 25px;
   border-radius: 12px;
-
   margin: 120px auto 40px;
 }
 
@@ -81,7 +78,6 @@ textarea {
   width: 100%;
   padding: 10px;
   margin: 8px 0;
-
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
@@ -97,13 +93,10 @@ button {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
-
   background: #667eea;
   color: white;
-
   border: none;
   border-radius: 6px;
-
   font-size: 15px;
   cursor: pointer;
   transition: 0.3s;
@@ -121,15 +114,13 @@ button:hover {
 
 .task {
   background: #f4f6ff;
-
   padding: 12px;
   border-radius: 8px;
-
   margin-bottom: 10px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .task.done {
@@ -139,26 +130,21 @@ button:hover {
 
 .task button {
   width: auto;
-  padding: 5px 10px;
+  padding: 6px 10px;
   font-size: 12px;
   margin-left: 5px;
+  margin-top: 5px;
 }
-
 
 .card {
   background: white;
-
   width: 350px;
+  max-width: 90%;
   padding: 30px;
-
   border-radius: 12px;
-
-  box-shadow: 0 15px 30px rgba(0,0,0,.2);
-
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   margin: 120px auto;
 }
-
-/* Switch */
 
 .switch {
   text-align: center;
@@ -166,4 +152,59 @@ button:hover {
   font-size: 14px;
   cursor: pointer;
   color: #667eea;
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 10px 20px;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  nav h3 {
+    font-size: 18px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .container {
+    width: 95%;
+    padding: 20px;
+    margin-top: 140px;
+  }
+
+  button {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .task button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  nav div {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  input,
+  textarea,
+  button {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .task {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task button {
+    margin-left: 0;
+    margin-top: 8px;
+  }
 }
