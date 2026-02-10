@@ -38,6 +38,13 @@ It also supports Role-Based Access Control (RBAC) with different user roles.
 
 ---
 
+🌍 Deployment
+
+Project is deployed on Render:
+
+🔗 https://task-manager-y06e.onrender.com
+
+
 ## 📂 Project Structure
 
 src/
