@@ -7,54 +7,103 @@ body {
   margin: 0;
   background: linear-gradient(135deg, #667eea, #764ba2);
   min-height: 100vh;
+}
+
+nav {
+  width: 100%;
+  background: #1e3a8a;
+
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+
+  padding: 15px 40px;
+  color: white;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
-/* Card */
+nav h3 {
+  margin: 0;
+  font-size: 20px;
+}
 
-.card {
+nav div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav button {
+  width: auto;
+  padding: 6px 14px;
+  background: #ef4444;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+nav button:hover {
+  background: #dc2626;
+}
+
+.container {
   background: white;
-  width: 350px;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 15px 30px rgba(0,0,0,.2);
-}
 
-/* Title */
+  width: 600px;
+  max-width: 90%;
+
+  padding: 25px;
+  border-radius: 12px;
+
+  margin: 120px auto 40px;
+}
 
 h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-/* Inputs */
-
-input, textarea {
+input,
+textarea {
   width: 100%;
   padding: 10px;
   margin: 8px 0;
+
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
   outline: none;
   border-color: #667eea;
 }
-
-/* Buttons */
 
 button {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
+
   background: #667eea;
   color: white;
+
   border: none;
   border-radius: 6px;
+
   font-size: 15px;
   cursor: pointer;
   transition: 0.3s;
@@ -62,32 +111,6 @@ button {
 
 button:hover {
   background: #5563d6;
-}
-
-/* Switch */
-
-.switch {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 14px;
-  cursor: pointer;
-  color: #667eea;
-}
-
-/* TASKS */
-
-.container {
-  background: white;
-  width: 600px;
-  max-width: 90%;
-  padding: 25px;
-  border-radius: 12px;
-}
-
-.top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 #tasks {
@@ -98,16 +121,19 @@ button:hover {
 
 .task {
   background: #f4f6ff;
+
   padding: 12px;
   border-radius: 8px;
+
   margin-bottom: 10px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .task.done {
-  opacity: .6;
+  opacity: 0.6;
   text-decoration: line-through;
 }
 
@@ -116,4 +142,28 @@ button:hover {
   padding: 5px 10px;
   font-size: 12px;
   margin-left: 5px;
+}
+
+
+.card {
+  background: white;
+
+  width: 350px;
+  padding: 30px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 15px 30px rgba(0,0,0,.2);
+
+  margin: 120px auto;
+}
+
+/* Switch */
+
+.switch {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #667eea;
 }
