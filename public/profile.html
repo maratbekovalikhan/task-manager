@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>My Tasks</title>
+  <title>Profile</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,14 +19,14 @@
 
 <div class="container">
 
-  <h2>My Tasks</h2>
+  <h2>My Profile</h2>
 
-  <input id="title" placeholder="Task title">
-  <textarea id="description" placeholder="Description"></textarea>
+  <p><b>Role:</b> <span id="role"></span></p>
 
-  <button onclick="createTask()">Add Task</button>
+  <input id="username" placeholder="Username">
+  <input id="email" placeholder="Email">
 
-  <ul id="tasks"></ul>
+  <button onclick="updateProfile()">Save</button>
 
 </div>
 

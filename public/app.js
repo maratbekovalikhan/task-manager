@@ -1,7 +1,5 @@
 const API = "/api";
 
-/* ===== SWITCH FORMS ===== */
-
 function showRegister() {
   document.getElementById("loginCard").style.display = "none";
   document.getElementById("registerCard").style.display = "block";
@@ -12,8 +10,6 @@ function showLogin() {
   document.getElementById("loginCard").style.display = "block";
 }
 
-/* ===== DOM ===== */
-
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 
@@ -23,8 +19,6 @@ const r_password = document.getElementById("r_password");
 
 const title = document.getElementById("title");
 const description = document.getElementById("description");
-
-/* ===== AUTH ===== */
 
 async function login() {
   try {
@@ -45,7 +39,7 @@ async function login() {
 
     location.href = "tasks.html";
 
-  } catch (err) {
+  } catch {
     alert("Server error");
   }
 }
@@ -69,12 +63,10 @@ async function register() {
     alert("Registered! Now login.");
     showLogin();
 
-  } catch (err) {
+  } catch {
     alert("Server error");
   }
 }
-
-/* ===== TASKS ===== */
 
 async function loadTasks() {
   const token = localStorage.getItem("token");
@@ -87,8 +79,6 @@ async function loadTasks() {
         Authorization: "Bearer " + token
       }
     });
-
-    if (!res.ok) return alert("Auth error");
 
     const data = await res.json();
 
@@ -116,7 +106,7 @@ async function loadTasks() {
       ul.appendChild(li);
     });
 
-  } catch (err) {
+  } catch {
     alert("Cannot load tasks");
   }
 }
@@ -126,31 +116,26 @@ async function createTask() {
 
   if (!title.value) return alert("Enter title");
 
-  try {
-    const res = await fetch(API + "/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token
-      },
-      body: JSON.stringify({
-        title: title.value,
-        description: description.value
-      })
-    });
+  const res = await fetch(API + "/tasks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({
+      title: title.value,
+      description: description.value
+    })
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (!res.ok) return alert(data.message || "Error");
+  if (!res.ok) return alert(data.message || "Error");
 
-    title.value = "";
-    description.value = "";
+  title.value = "";
+  description.value = "";
 
-    loadTasks();
-
-  } catch (err) {
-    alert("Server error");
-  }
+  loadTasks();
 }
 
 async function del(id) {
@@ -185,15 +170,53 @@ async function toggle(id, status) {
   loadTasks();
 }
 
-/* ===== LOGOUT ===== */
+async function loadProfile() {
+  const token = localStorage.getItem("token");
+
+  if (!token) return logout();
+
+  const res = await fetch(API + "/users/profile", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  const data = await res.json();
+
+  document.getElementById("username").value = data.username;
+  document.getElementById("email").value = data.email;
+  document.getElementById("role").innerText = data.role;
+}
+
+async function updateProfile() {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(API + "/users/profile", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({
+      username: username.value,
+      email: email.value
+    })
+  });
+
+  if (!res.ok) return alert("Update error");
+
+  alert("Profile updated!");
+}
 
 function logout() {
   localStorage.clear();
   location.href = "/";
 }
 
-/* ===== AUTO LOAD ===== */
-
 if (location.pathname.includes("tasks.html")) {
   loadTasks();
+}
+
+if (location.pathname.includes("profile.html")) {
+  loadProfile();
 }
